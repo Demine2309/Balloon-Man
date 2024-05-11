@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    private const float MAX_FORCE = 100f;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float holdForce = 0f;
+
     private Rigidbody2D rb;
 
     private void Awake()
@@ -16,25 +19,45 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        #region Using keyboard to move
-        float rotationSpeed = 90;
-
-        if (Input.GetKey(KeyCode.A))
-            rb.transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
-
-        if (Input.GetKey(KeyCode.D))
-            rb.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
-        #endregion
-
-        #region Using mouse to move
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward * 10;
-        Vector3 dirToMouse = mousePos - transform.position;
-
-        transform.up = dirToMouse;
-        #endregion
+        PlayerRotatation();
+        MoveForward();
     }
 
     private void FixedUpdate()
     {
+    }
+
+    private void PlayerRotatation()
+    {
+        float rotationSpeed = 90;
+
+        if (Input.GetKey(KeyCode.A))
+            rb.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+
+        if (Input.GetKey(KeyCode.D))
+            rb.transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+    }
+
+    private void MoveForward()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            StartCoroutine(IncreaseHoldForce());
+            Debug.Log(holdForce);
+        }
+        else
+        {
+            StopAllCoroutines();
+            holdForce = 0f;
+        }
+    }
+
+    private IEnumerator IncreaseHoldForce()
+    {
+        while (true)
+        {
+            holdForce = Mathf.Min(holdForce + 5 * Time.deltaTime, MAX_FORCE);
+            yield return null;
+        }
     }
 }
