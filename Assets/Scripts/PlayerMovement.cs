@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private const float MAX_FORCE = 100f;
-    [SerializeField] private float moveSpeed = 5f;
+
+    [SerializeField] private float moveSpeed;
+
     [SerializeField] private float holdForce = 0f;
 
     private Rigidbody2D rb;
@@ -47,6 +49,14 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            if (holdForce > 0)
+            {
+                Vector2 force = transform.up * holdForce * moveSpeed;
+                rb.AddForce(force);
+
+                rb.drag = 2.5f;
+            }
+
             StopAllCoroutines();
             holdForce = 0f;
         }
@@ -59,5 +69,10 @@ public class PlayerMovement : MonoBehaviour
             holdForce = Mathf.Min(holdForce + 5 * Time.deltaTime, MAX_FORCE);
             yield return null;
         }
+    }
+
+    public float GetHoldForce()
+    {
+        return holdForce;
     }
 }

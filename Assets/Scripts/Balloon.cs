@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Balloon : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private const float MAX_FORCE = 100f;
+
+    private Vector3 initialScale;
+    [SerializeField] private float sizeBalloon = 5f;
+    [SerializeField] private PlayerMovement player;
+
+    private void Awake()
     {
-        
+        initialScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        float holdForce = player.GetHoldForce();
+
+        float scale =  holdForce / MAX_FORCE;
+        transform.localScale = initialScale * scale * sizeBalloon;
     }
 }
