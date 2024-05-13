@@ -7,8 +7,8 @@ public class PlayerMovement : MonoBehaviour
     private const float MAX_FORCE = 100f;
 
     [SerializeField] private float moveSpeed;
-
     [SerializeField] private float holdForce = 0f;
+    private bool forceApplied = false;
 
     private Rigidbody2D rb;
 
@@ -67,6 +67,17 @@ public class PlayerMovement : MonoBehaviour
         while (true)
         {
             holdForce = Mathf.Min(holdForce + 5 * Time.deltaTime, MAX_FORCE);
+
+            if (holdForce >= MAX_FORCE)
+            {
+                // Apply force
+                Vector2 force = transform.up * holdForce * moveSpeed;
+                rb.AddForce(force);
+
+                // Reset holdForce
+                holdForce = 0f;
+            }
+
             yield return null;
         }
     }
