@@ -8,14 +8,13 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float holdForce = 0f;
-    private bool forceApplied = false;
 
     private Rigidbody2D rb;
+    private Coroutine holdForceCoroutine;
 
     private void Awake()
     {
         transform.position = new Vector3(0, 0, 0);
-
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -25,59 +24,62 @@ public class PlayerMovement : MonoBehaviour
         MoveForward();
     }
 
-    private void FixedUpdate()
-    {
-    }
-
     private void PlayerRotatation()
     {
-        float rotationSpeed = 90;
+        if (holdForce == 0)
+        {
+            float rotationSpeed = 90;
 
-        if (Input.GetKey(KeyCode.A))
-            rb.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.A))
+                rb.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.D))
-            rb.transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.D))
+                rb.transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+        }
     }
 
     private void MoveForward()
     {
         if (Input.GetKey(KeyCode.W))
         {
-            StartCoroutine(IncreaseHoldForce());
-            Debug.Log(holdForce);
-        }
-        else
-        {
-            if (holdForce > 0)
+            if (holdForce < MAX_FORCE)
             {
-                Vector2 force = transform.up * holdForce * moveSpeed;
-                rb.AddForce(force);
-
-                rb.drag = 2.5f;
+                if (holdForceCoroutine == null)
+                {
+                    holdForceCoroutine = StartCoroutine(IncreaseHoldForce());
+                }
+                Debug.Log(holdForce);
             }
-
-            StopAllCoroutines();
-            holdForce = 0f;
+            else
+            {
+                ApplyForceAndResetHoldForce();
+            }
         }
+        else if (holdForce > 0)
+        {
+            ApplyForceAndResetHoldForce();
+        }
+    }
+
+    private void ApplyForceAndResetHoldForce()
+    {
+        Vector2 force = transform.up * holdForce * moveSpeed;
+        rb.AddForce(force);
+        rb.drag = 2.5f;
+
+        if (holdForceCoroutine != null)
+        {
+            StopCoroutine(holdForceCoroutine);
+            holdForceCoroutine = null;
+        }
+        holdForce = 0f;
     }
 
     private IEnumerator IncreaseHoldForce()
     {
-        while (true)
+        while (holdForce < MAX_FORCE)
         {
             holdForce = Mathf.Min(holdForce + 5 * Time.deltaTime, MAX_FORCE);
-
-            if (holdForce >= MAX_FORCE)
-            {
-                // Apply force
-                Vector2 force = transform.up * holdForce * moveSpeed;
-                rb.AddForce(force);
-
-                // Reset holdForce
-                holdForce = 0f;
-            }
-
             yield return null;
         }
     }
