@@ -7,7 +7,7 @@ public class Balloon : MonoBehaviour
     private const float MAX_FORCE = 100f;
 
     private Vector3 initialScale;
-    [SerializeField] private float sizeBalloon = 5f;
+    [SerializeField] private float sizeBalloon;
     [SerializeField] private PlayerMovement player;
 
     private void Awake()

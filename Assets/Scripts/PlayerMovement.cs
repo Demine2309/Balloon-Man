@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float holdForce = 0f;
+    [SerializeField] private float dragForce = 0f;
 
     private Rigidbody2D rb;
     private Coroutine holdForceCoroutine;
@@ -45,33 +46,28 @@ public class PlayerMovement : MonoBehaviour
             if (holdForce < MAX_FORCE)
             {
                 if (holdForceCoroutine == null)
-                {
                     holdForceCoroutine = StartCoroutine(IncreaseHoldForce());
-                }
-                Debug.Log(holdForce);
             }
             else
-            {
                 ApplyForceAndResetHoldForce();
-            }
         }
         else if (holdForce > 0)
-        {
             ApplyForceAndResetHoldForce();
-        }
     }
 
     private void ApplyForceAndResetHoldForce()
     {
         Vector2 force = transform.up * holdForce * moveSpeed;
         rb.AddForce(force);
-        rb.drag = 2.5f;
+
+        rb.drag = dragForce;
 
         if (holdForceCoroutine != null)
         {
             StopCoroutine(holdForceCoroutine);
             holdForceCoroutine = null;
         }
+
         holdForce = 0f;
     }
 
@@ -79,7 +75,8 @@ public class PlayerMovement : MonoBehaviour
     {
         while (holdForce < MAX_FORCE)
         {
-            holdForce = Mathf.Min(holdForce + 5 * Time.deltaTime, MAX_FORCE);
+            holdForce += 2;
+
             yield return null;
         }
     }
