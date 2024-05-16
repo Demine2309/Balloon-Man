@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        transform.position = new Vector3(0, 0, 0);
+        transform.position = new Vector3(0, -3.85f, 0);
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
         else if (holdForce > 0)
             ApplyForceAndResetHoldForce();
     }
+
 
     private void ApplyForceAndResetHoldForce()
     {
