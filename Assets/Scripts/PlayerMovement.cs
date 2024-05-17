@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        transform.position = new Vector3(0, -3.85f, 0);
+        transform.position = new Vector3(0, 0f, 0);
         rb = GetComponent<Rigidbody2D>();
     }
 

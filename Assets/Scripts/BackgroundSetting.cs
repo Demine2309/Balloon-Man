@@ -1,14 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class BackgroundSetting : MonoBehaviour
 {
     [Range(-1f, 1f)]
-    public float scrollSpeed = 0.5f;
+    [SerializeField] private float scrollSpeed = 0.5f;
     private Vector2 offset;
     private Material mat;
     private float time;
+
+    [SerializeField] private float smoothTime = 0.25f;
+    private Vector3 velocity = Vector3.zero;
+
+    [SerializeField] private Transform target;
 
     private void Start()
     {
@@ -23,5 +29,8 @@ public class BackgroundSetting : MonoBehaviour
         offset.x = Mathf.Cos(time) / 10f;
         offset.y = Mathf.Sin(time) / 10f;
         mat.SetTextureOffset("_MainTex", offset);
+
+        Vector3 targetPosition = target.position + (Vector3)target.GetComponent<Rigidbody2D>().velocity * Time.deltaTime;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
     }
 }
