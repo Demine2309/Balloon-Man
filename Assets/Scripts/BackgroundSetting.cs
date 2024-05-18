@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 public class BackgroundSetting : MonoBehaviour
 {
     [Range(-1f, 1f)]
-    [SerializeField] private float scrollSpeed = 0.5f;
+    [SerializeField] private float scrollSpeed = 0.25f;
     private Vector2 offset;
     private Material mat;
     private float time;
