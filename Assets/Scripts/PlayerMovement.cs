@@ -43,7 +43,10 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             if (holdForce < MAX_FORCE)
-                holdForce += 2;
+            {
+                holdForce += 100 * Time.fixedDeltaTime;
+                Debug.Log(holdForce);
+            }
             else
                 ApplyForceAndResetHoldForce();
         }
