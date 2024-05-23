@@ -8,23 +8,29 @@ public class Score : MonoBehaviour
     public Text scoreText;
     private int score = 0;
 
-    private float playetHeight = 1f;
+    private float baseHeight;
+    private float maxHeightReached;
 
     [SerializeField] private PlayerMovement player;
 
     private void Start()
     {
+        baseHeight = player.transform.position.y;
+        maxHeightReached = baseHeight;
 
+        scoreText.text = "SCORE: " + score.ToString();
     }
 
     private void Update()
     {
-        scoreText.text = score.ToString();
-
-        float currentHeight = player.transform.position.y;
-
-        currentHeight = Mathf.Max(0f, currentHeight);
-
-
+        // Check if the player has reached a new maximum height
+        if (player.transform.position.y > maxHeightReached)
+        {
+            maxHeightReached = player.transform.position.y;
+            // Calculate the score based on the maximum height reached
+            score = Mathf.FloorToInt(maxHeightReached - baseHeight);
+            // Update the score text
+            scoreText.text = "SCORE: " + score.ToString();
+        }
     }
 }
