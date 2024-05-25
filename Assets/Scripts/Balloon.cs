@@ -12,7 +12,7 @@ public class Balloon : MonoBehaviour
 
     private void Awake()
     {
-        initialScale = new Vector3(0.3f, 0.3f, 0.3f);
+        initialScale = new Vector3(0.1f, 0.1f, 0.1f);
     }
 
     private void Update()

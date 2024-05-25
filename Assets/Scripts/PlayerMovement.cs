@@ -5,10 +5,12 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private const float MAX_FORCE = 100f;
+    private const float MAX_STAMINA = 1000f;
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float holdForce = 0f;
     [SerializeField] private float dragForce = 0f;
+    [SerializeField] private float stamina = MAX_STAMINA;
 
     private Rigidbody2D rb;
 
@@ -21,7 +23,12 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         PlayerRotatation();
-        MoveForward();
+
+        if(stamina > 0)
+        {
+            MoveForward();
+        }
+
     }
 
     private void PlayerRotatation()
@@ -46,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 holdForce += 100 * Time.fixedDeltaTime;
                 Debug.Log(holdForce);
+                Debug.Log(stamina);
             }
             else
                 ApplyForceAndResetHoldForce();
@@ -57,17 +65,34 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyForceAndResetHoldForce()
     {
-        Vector2 force = transform.up * holdForce * moveSpeed;
-        rb.AddForce(force);
+        if (stamina > 0)
+        {
+            Vector2 force = transform.up * holdForce * moveSpeed;
+            rb.AddForce(force);
 
-        rb.drag = dragForce;
+            rb.drag = dragForce;
 
-        holdForce = 0f;
+            stamina -= holdForce;
+            stamina = Mathf.Clamp(stamina, 0, MAX_STAMINA);
+
+            holdForce = 0f;
+        }
     }
 
     public float GetHoldForce()
     {
         return holdForce;
+    }
+
+    public float GetStamina()
+    {
+        return stamina;
+    }
+
+    public void AddStamina(float amount)
+    {
+        stamina += amount;
+        stamina = Mathf.Clamp(stamina, 0, MAX_STAMINA);
     }
 }
 
