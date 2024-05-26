@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     {
         PlayerRotatation();
 
-        if(stamina > 0)
+        if (stamina > 0)
         {
             MoveForward();
         }
@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerRotatation()
     {
-        if (holdForce == 0)
+        if(holdForce == 0f)
         {
             float rotationSpeed = 90;
 
@@ -52,18 +52,25 @@ public class PlayerMovement : MonoBehaviour
             if (holdForce < MAX_FORCE)
             {
                 holdForce += 100 * Time.fixedDeltaTime;
-                Debug.Log(holdForce);
-                Debug.Log(stamina);
+                holdForce = Mathf.Clamp(holdForce, 0, MAX_FORCE);
             }
-            else
-                ApplyForceAndResetHoldForce();
+            else if(holdForce == 100f)
+            {
+                ApplyForce();
+                holdForce = 0f;
+            }
         }
         else if (holdForce > 0)
-            ApplyForceAndResetHoldForce();
+        {
+            Debug.Log("Hold force: " + holdForce);
+            ApplyForce();
+            Debug.Log("Stamina: " + stamina);
+
+            holdForce = 0f;
+        }
     }
 
-
-    private void ApplyForceAndResetHoldForce()
+    private void ApplyForce()
     {
         if (stamina > 0)
         {
@@ -72,10 +79,9 @@ public class PlayerMovement : MonoBehaviour
 
             rb.drag = dragForce;
 
+            // Reduce stamina after each hold
             stamina -= holdForce;
             stamina = Mathf.Clamp(stamina, 0, MAX_STAMINA);
-
-            holdForce = 0f;
         }
     }
 
@@ -88,11 +94,4 @@ public class PlayerMovement : MonoBehaviour
     {
         return stamina;
     }
-
-    public void AddStamina(float amount)
-    {
-        stamina += amount;
-        stamina = Mathf.Clamp(stamina, 0, MAX_STAMINA);
-    }
 }
-
