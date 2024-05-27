@@ -54,11 +54,11 @@ public class PlayerMovement : MonoBehaviour
                 holdForce += 100 * Time.fixedDeltaTime;
                 holdForce = Mathf.Clamp(holdForce, 0, MAX_FORCE);
             }
-            else if(holdForce == 100f)
-            {
-                ApplyForce();
-                holdForce = 0f;
-            }
+            //else if (holdForce == 100f)
+            //{
+            //    ApplyForce();
+            //    holdForce = 0f;
+            //}
         }
         else if (holdForce > 0)
         {
