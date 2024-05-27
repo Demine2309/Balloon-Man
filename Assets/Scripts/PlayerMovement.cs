@@ -33,8 +33,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerRotatation()
     {
-        if(holdForce == 0f)
-        {
+        //if(holdForce == 0f)
+        //{
             float rotationSpeed = 90;
 
             if (Input.GetKey(KeyCode.A))
@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetKey(KeyCode.D))
                 rb.transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
-        }
+        //}
     }
 
     private void MoveForward()
