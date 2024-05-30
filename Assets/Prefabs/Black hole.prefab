@@ -72,6 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 689071900106746015}
   - component: {fileID: 337994763164261228}
+  - component: {fileID: -6268867082795340908}
   m_Layer: 0
   m_Name: Black hole
   m_TagString: Untagged
@@ -150,6 +151,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-6268867082795340908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6709981364667326768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54422cc08699b244a88ac736187c662b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragForce: 0
+  points: []
 --- !u!1 &8004410405375948308
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +329,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54422cc08699b244a88ac736187c662b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  point1: {fileID: 3927288474806479181}
-  point2: {fileID: 9183280547985905360}
-  point3: {fileID: 852018110670370455}
+  dragForce: 0
+  points: []
