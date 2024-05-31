@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class BlackHoleManage : MonoBehaviour
 {
-    [SerializeField] private float dragForce;
-
+    public Transform target;
     [SerializeField] private List<Transform> points;
 
+    [SerializeField] private float dragForce = 5f;
 
     private void Update()
     {
@@ -15,18 +15,24 @@ public class BlackHoleManage : MonoBehaviour
         {
             int layerMask = LayerMask.GetMask("Player");
 
-            Vector2 direction = points[i].position - points[0].position;
+            Vector2 direction = points[i].position - points[0].position; // Calculate direction vector
 
-            RaycastHit2D hit = Physics2D.Raycast(points[0].position, direction, 10f, layerMask);
+            float distance = direction.magnitude;
 
             Color rayColor = Color.green;
 
+            RaycastHit2D hit = Physics2D.Raycast(points[0].position, direction, distance, layerMask);
+
             if (hit.collider != null)
+            {
                 rayColor = Color.red;
+                Vector3 newPos = Vector3.MoveTowards(transform.position, target.position, dragForce * Time.deltaTime);
+                transform.position = newPos;
+            }
             else
                 rayColor = Color.green;
 
-            Debug.DrawRay(points[0].position, direction * 10f, rayColor);
+            Debug.DrawRay(points[0].position, direction, rayColor);
         }
     }
 }
